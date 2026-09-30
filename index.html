@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#11120f" />
+  <meta name="description" content="Beam — a browser-based 3D lighting reference tool for artists." />
+  <title>Beam — 3D Lighting Reference</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div>
+          <div class="brand-name">Beam</div>
+          <div class="brand-subtitle">3D lighting reference</div>
+        </div>
+      </div>
+
+      <div class="topbar-center">
+        <span id="status-pill" class="status-pill"><i></i>Ready</span>
+        <span id="scene-label" class="scene-label">Neutral Head</span>
+      </div>
+
+      <div class="topbar-actions">
+        <button id="focus-model" class="icon-button" title="Frame model (F)" aria-label="Frame model">⌗</button>
+        <button id="reset-scene" class="icon-button" title="Reset scene" aria-label="Reset scene">↺</button>
+        <button id="open-tools" class="mobile-tools-button" aria-label="Open tools">Tools</button>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <aside id="tool-panel" class="tool-panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">SCENE</span>
+            <h1>Reference setup</h1>
+          </div>
+          <button id="close-tools" class="panel-close" aria-label="Close tools">×</button>
+        </div>
+
+        <section class="tool-section">
+          <div class="section-title-row">
+            <h2>Model</h2>
+            <span id="model-source" class="subtle-label">Built-in</span>
+          </div>
+          <label class="field-label" for="model-select">Base model</label>
+          <select id="model-select" class="select-control">
+            <option value="neutral-head">Head · neutral</option>
+            <option value="masculine-head">Head · masculine</option>
+            <option value="feminine-head">Head · feminine</option>
+            <option value="hand">Hand · right</option>
+          </select>
+
+          <label class="dropzone" for="model-upload">
+            <input id="model-upload" type="file" accept=".glb,.gltf,.bin,.png,.jpg,.jpeg,.webp" multiple />
+            <span class="dropzone-icon">↑</span>
+            <span>
+              <strong>Drop a model here</strong>
+              <small>GLB or GLTF + its textures</small>
+            </span>
+          </label>
+
+          <div class="range-row">
+            <div>
+              <span class="field-label">Scale</span>
+              <span id="model-scale-value" class="field-value">1.00×</span>
+            </div>
+            <input id="model-scale" type="range" min="0.35" max="2.5" value="1" step="0.01" />
+          </div>
+          <div class="range-row">
+            <div>
+              <span class="field-label">Z position</span>
+              <span id="model-z-value" class="field-value">0.00</span>
+            </div>
+            <input id="model-z" type="range" min="-2" max="2" value="0" step="0.01" />
+          </div>
+          <div class="inline-actions">
+            <button id="frame-model" class="secondary-button">Frame</button>
+            <button id="reset-model" class="secondary-button">Reset model</button>
+          </div>
+        </section>
+
+        <section class="tool-section">
+          <div class="section-title-row">
+            <h2>Lights</h2>
+            <span id="light-count" class="subtle-label">3 / 10</span>
+          </div>
+          <div id="light-list" class="light-list" aria-label="Scene lights"></div>
+          <button id="add-light" class="add-button">＋ Add light</button>
+        </section>
+
+        <section class="tool-section compact-section">
+          <div class="section-title-row">
+            <h2>Selected light</h2>
+            <span id="selected-light-name" class="subtle-label">Key</span>
+          </div>
+
+          <label class="field-label" for="light-type">Type</label>
+          <select id="light-type" class="select-control">
+            <option value="area">Area</option>
+            <option value="point">Point</option>
+            <option value="spot">Spot</option>
+            <option value="sun">Sun</option>
+          </select>
+
+          <div class="control-grid two">
+            <div>
+              <label class="field-label" for="light-intensity">Power</label>
+              <input id="light-intensity" class="number-control" type="number" min="0" max="1000" value="35" step="1" />
+            </div>
+            <div>
+              <label class="field-label" for="light-temperature">Temperature</label>
+              <input id="light-temperature" class="number-control" type="number" min="1800" max="12000" value="5200" step="50" />
+            </div>
+          </div>
+
+          <div class="color-mode-row">
+            <div class="segmented-control small" role="group" aria-label="Light color mode">
+              <button data-color-mode="temp" class="active">Temp</button>
+              <button data-color-mode="custom">Color</button>
+            </div>
+            <input id="light-color" type="color" value="#ffffff" aria-label="Custom light color" />
+          </div>
+
+          <div class="range-row">
+            <div>
+              <span class="field-label">X</span>
+              <span id="light-x-value" class="field-value">2.80</span>
+            </div>
+            <input id="light-x" type="range" min="-8" max="8" value="2.8" step="0.01" />
+          </div>
+          <div class="range-row">
+            <div>
+              <span class="field-label">Y</span>
+              <span id="light-y-value" class="field-value">-2.00</span>
+            </div>
+            <input id="light-y" type="range" min="-8" max="8" value="-2" step="0.01" />
+          </div>
+          <div class="range-row">
+            <div>
+              <span class="field-label">Z</span>
+              <span id="light-z-value" class="field-value">3.80</span>
+            </div>
+            <input id="light-z" type="range" min="0" max="8" value="3.8" step="0.01" />
+          </div>
+
+          <div id="area-controls" class="range-row conditional-control">
+            <div>
+              <span class="field-label">Size</span>
+              <span id="area-size-value" class="field-value">2.40</span>
+            </div>
+            <input id="area-size" type="range" min="0.25" max="8" value="2.4" step="0.05" />
+          </div>
+          <div id="spot-controls" class="spot-controls conditional-control">
+            <div class="range-row">
+              <div><span class="field-label">Angle</span><span id="spot-angle-value" class="field-value">28°</span></div>
+              <input id="spot-angle" type="range" min="8" max="80" value="28" step="1" />
+            </div>
+            <div class="range-row">
+              <div><span class="field-label">Softness</span><span id="spot-softness-value" class="field-value">0.35</span></div>
+              <input id="spot-softness" type="range" min="0" max="1" value="0.35" step="0.01" />
+            </div>
+          </div>
+
+          <div class="inline-actions">
+            <button id="duplicate-light" class="secondary-button">Duplicate</button>
+            <button id="delete-light" class="danger-button">Delete</button>
+          </div>
+        </section>
+
+        <section class="tool-section">
+          <div class="section-title-row">
+            <h2>Environment</h2>
+            <span class="subtle-label">World</span>
+          </div>
+          <div class="segmented-control" role="group" aria-label="Environment mode">
+            <button data-env-mode="solid" class="active">Solid</button>
+            <button data-env-mode="hdri">HDRI</button>
+          </div>
+          <div id="solid-env-controls" class="environment-controls">
+            <label class="field-label" for="world-color">World color</label>
+            <input id="world-color" type="color" class="wide-color" value="#151712" />
+          </div>
+          <div id="hdri-env-controls" class="environment-controls hidden">
+            <label class="field-label" for="hdri-select">HDRI</label>
+            <select id="hdri-select" class="select-control">
+              <option value="royal">Royal Esplanade · 1K</option>
+              <option value="venice">Venice Sunset · 1K</option>
+              <option value="studio">Studio Neutral · 1K</option>
+            </select>
+          </div>
+          <div class="range-row">
+            <div><span class="field-label">Strength</span><span id="env-strength-value" class="field-value">0.35</span></div>
+            <input id="env-strength" type="range" min="0" max="1.5" value="0.35" step="0.01" />
+          </div>
+        </section>
+
+        <section id="rig-section" class="tool-section hidden">
+          <div class="section-title-row">
+            <h2>Rig / Animation</h2>
+            <span id="rig-label" class="subtle-label">No rig</span>
+          </div>
+          <label class="field-label" for="animation-select">Animation</label>
+          <select id="animation-select" class="select-control"></select>
+          <div class="toggle-row">
+            <span>Play animation</span>
+            <label class="switch"><input id="animation-toggle" type="checkbox" /><span></span></label>
+          </div>
+          <label class="field-label" for="bone-select">Pose bone</label>
+          <select id="bone-select" class="select-control"></select>
+          <div class="range-row">
+            <div><span class="field-label">Bone X</span><span id="bone-x-value" class="field-value">0°</span></div>
+            <input id="bone-x" type="range" min="-90" max="90" value="0" step="1" />
+          </div>
+          <div class="range-row">
+            <div><span class="field-label">Bone Y</span><span id="bone-y-value" class="field-value">0°</span></div>
+            <input id="bone-y" type="range" min="-90" max="90" value="0" step="1" />
+          </div>
+          <div class="range-row">
+            <div><span class="field-label">Bone Z</span><span id="bone-z-value" class="field-value">0°</span></div>
+            <input id="bone-z" type="range" min="-90" max="90" value="0" step="1" />
+          </div>
+          <button id="reset-pose" class="secondary-button full-button">Reset pose</button>
+        </section>
+
+        <div class="panel-footer">
+          <span>10-light scene limit</span>
+          <span>F · frame model</span>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <section class="viewport-shell main-shell">
+          <div id="main-viewport" class="three-viewport" aria-label="3D model viewport"></div>
+          <div class="viewport-chrome top-left">
+            <span class="viewport-title">Perspective</span>
+            <span class="viewport-subtitle">Orbit · Zoom · Pan</span>
+          </div>
+          <div class="viewport-chrome bottom-left">
+            <span id="main-coordinates">X 0.00 · Y 0.00 · Z 0.00</span>
+          </div>
+          <div id="loading-overlay" class="loading-overlay">
+            <div class="spinner"></div>
+            <span>Preparing reference scene…</span>
+          </div>
+        </section>
+
+        <div class="control-view-grid">
+          <section class="viewport-shell control-shell" id="top-view-shell">
+            <canvas id="top-view" class="map-canvas" aria-label="Top orthographic light placement view"></canvas>
+            <div class="viewport-chrome top-left">
+              <span class="viewport-title">Top</span>
+              <span class="viewport-subtitle">X · Y</span>
+            </div>
+            <div class="viewport-chrome bottom-right">Drag a light</div>
+          </section>
+
+          <section class="viewport-shell control-shell" id="front-view-shell">
+            <canvas id="front-view" class="map-canvas" aria-label="Front orthographic light placement view"></canvas>
+            <div class="viewport-chrome top-left">
+              <span class="viewport-title">Front</span>
+              <span class="viewport-subtitle">X · Z</span>
+            </div>
+            <div class="viewport-chrome bottom-right">Drag a light</div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
