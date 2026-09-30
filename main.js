@@ -112,7 +112,7 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = THREE.PCFShadowMap;
 dom.mainViewport.appendChild(renderer.domElement);
 
 // A small, fixed studio fill keeps the reference readable even before a user adds lights.
@@ -172,9 +172,9 @@ const loaderManager = new THREE.LoadingManager();
 const gltfLoader = new GLTFLoader(loaderManager);
 
 const HDRIS = {
-  royal: 'https://threejs.org/examples/textures/equirectangular/royal_esplanade_1k.hdr',
-  venice: 'https://threejs.org/examples/textures/equirectangular/venice_sunset_1k.hdr',
-  studio: 'https://threejs.org/examples/textures/equirectangular/empty_warehouse_01_1k.hdr',
+  royal: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/royal_esplanade_1k.hdr',
+  venice: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/venice_sunset_1k.hdr',
+  studio: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_03_1k.hdr',
 };
 
 const lightGlyphs = new Map();
@@ -1205,10 +1205,12 @@ resizeObserver.observe(dom.mainViewport);
 resizeObserver.observe(dom.topView);
 resizeObserver.observe(dom.frontView);
 
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
+timer.connect(document);
 function animate() {
   requestAnimationFrame(animate);
-  const delta = clock.getDelta();
+  timer.update();
+  const delta = timer.getDelta();
   controls.update();
   if (state.animationMixer && state.activeAction && dom.animationToggle.checked) state.animationMixer.update(delta);
   renderer.render(scene, camera);
