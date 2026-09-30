@@ -1,8 +1,8 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/loaders/GLTFLoader.js';
-import { HDRLoader } from 'https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/loaders/HDRLoader.js';
-import { RectAreaLightHelper } from 'https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/helpers/RectAreaLightHelper.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 // -----------------------------------------------------------------------------
 // Beam — a lightweight, artist-facing lighting reference scene.
@@ -65,7 +65,6 @@ const dom = {
   boneY: $('bone-y'), boneYValue: $('bone-y-value'),
   boneZ: $('bone-z'), boneZValue: $('bone-z-value'),
   mainCoordinates: $('main-coordinates'),
-  toast: $('toast'),
 };
 
 const state = {
